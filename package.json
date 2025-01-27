@@ -11,9 +11,12 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.2",
     "antd": "^5.23.2",
+    "antd-style": "^3.7.1",
+    "axios": "^1.7.9",
     "next": "^15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
