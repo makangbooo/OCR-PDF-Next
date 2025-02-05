@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import {InboxOutlined} from '@ant-design/icons';
 import type {UploadProps} from 'antd';
 import {FileTextOutlined} from '@ant-design/icons';
-import { AntDesignOutlined } from '@ant-design/icons';
-import { createStyles } from 'antd-style';
 
 import {message, Upload, FloatButton, Drawer, Flex, Splitter, Typography,Button} from 'antd';
+import UploadButton from "@/app/components/uploadButton";
+import PdfViewer from "@/app/components/pdfPreviewer/page";
 
 const {Dragger} = Upload;
 
@@ -30,29 +30,6 @@ const props: UploadProps = {
 		console.log('Dropped files', e.dataTransfer.files);
 	},
 };
-const useStyle = createStyles(({ prefixCls, css }) => ({
-	linearGradientButton: css`
-    &.${prefixCls}-btn-primary:not([disabled]):not(.${prefixCls}-btn-dangerous) {
-      > span {
-        position: relative;
-      }
-
-      &::before {
-        content: '';
-        background: linear-gradient(135deg, #6253e1, #04befe);
-        position: absolute;
-        inset: -1px;
-        opacity: 1;
-        transition: all 0.3s;
-        border-radius: inherit;
-      }
-
-      &:hover::before {
-        opacity: 0;
-      }
-    }
-  `,
-}));
 
 
 const App: React.FC = () => {
@@ -64,7 +41,6 @@ const App: React.FC = () => {
 	const onClose = () => {
 		setOpen(false);
 	};
-	const { styles } = useStyle();
 
 	return (
 		<>
@@ -87,17 +63,7 @@ const App: React.FC = () => {
 			</Drawer>
 			<Splitter style={{ height: 800, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
 				<Splitter.Panel defaultSize="20%" min="10%">
-
-					<Button
-						icon={<AntDesignOutlined />}
-						type="primary"
-						size="large"
-						block
-						className={styles.linearGradientButton}
-						onClick={showDrawer}
-					>
-						开始上传文件
-					</Button>
+					<UploadButton onClick={showDrawer}/>
 					<Flex justify="center" align="center" style={{ height: '100%' }}>
 						<Typography.Title type="secondary" level={5} style={{ whiteSpace: 'nowrap' }}>
 							原始文件
@@ -108,7 +74,7 @@ const App: React.FC = () => {
 				<Splitter.Panel defaultSize="60%" min="10%">
 					<Flex justify="center" align="center" style={{ height: '100%' }}>
 						<Typography.Title type="secondary" level={5} style={{ whiteSpace: 'nowrap' }}>
-							pdf预览
+							<PdfViewer/>
 						</Typography.Title>
 					</Flex>
 				</Splitter.Panel>
