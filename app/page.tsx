@@ -18,6 +18,9 @@ const App: React.FC = () => {
 	const onClose = () => {
 		setOpen(false);
 	};
+	const refreshPdfUrl = (url) => {
+		setPdfUrl(url);
+	}
 
 	return (
 		<>
@@ -28,7 +31,7 @@ const App: React.FC = () => {
 				open={open}
 			>
 				{/*拖拽上传框*/}
-				<UploadViewer/>
+				<UploadViewer refreshPdfUrl={refreshPdfUrl}/>
 			</Drawer>
 			<Splitter style={{ height: 800, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
 				<Splitter.Panel defaultSize="20%" min="10%">
@@ -43,7 +46,13 @@ const App: React.FC = () => {
 				<Splitter.Panel defaultSize="60%" min="10%">
 					<Flex justify="center" align="center" style={{ height: '100%' }}>
 						<Typography.Title type="secondary" level={5} style={{ whiteSpace: 'nowrap' }}>
-							<PdfViewer pdfurl={pdfUrl}/>
+							{/*<PdfViewer pdfurl={pdfUrl}/>*/}
+							{pdfUrl && (
+							<div className="mt-4">
+								<h2 className="text-xl">OCR 生成的 PDF：</h2>
+								<iframe src={pdfUrl} width="100%" height="600px" className="border rounded"></iframe>
+							</div>
+							)}
 						</Typography.Title>
 					</Flex>
 				</Splitter.Panel>

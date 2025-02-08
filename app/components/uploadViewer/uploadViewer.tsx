@@ -2,6 +2,8 @@
 import React from 'react';
 import { message, Upload, type UploadProps} from "antd";
 import {InboxOutlined} from "@ant-design/icons";
+import { useState } from "react";
+import axios from "axios";
 
 const {Dragger} = Upload;
 
@@ -27,7 +29,39 @@ const props: UploadProps = {
 };
 
 // 渐变色按钮
-const UploadViewer: React.FC= () => {
+const UploadViewer: React.FC<{ refreshPdfUrl: () => void }>= ({refreshPdfUrl} ) => {
+	const [file, setFile] = useState(null);
+
+	const handleFileChange = (e) => {
+		setFile(e.target.files[0]);
+	};
+
+	const handleUpload = async () => {
+		if (!file) {
+			alert("请选择图片文件！");
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append("file", file);
+
+		try {
+			const response = await axios.post("http://localhost:8080/upload", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+				responseType: "blob", // 期待后端返回 PDF 文件
+			});
+
+			// 将 Blob 转换成可预览的 PDF 链接
+			const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+			const pdfUrl = URL.createObjectURL(pdfBlob);
+			refreshPdfUrl(pdfUrl);
+			console.log("UploadViewer:",pdfUrl);
+		} catch (error) {
+			console.error("上传失败:", error);
+		}
+	};
 
 	return(
 	<>
@@ -42,6 +76,10 @@ const UploadViewer: React.FC= () => {
 				banned files.
 			</p>
 		</Dragger>
+		<input type="file" accept="image/*" onChange={handleFileChange} />
+		<button onClick={handleUpload} className="mt-2 p-2 bg-blue-500 text-white rounded">
+			上传图片
+		</button>
 	</>
 	)
 }
