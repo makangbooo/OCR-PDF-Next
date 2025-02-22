@@ -3,6 +3,7 @@ import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import html2canvas from "html2canvas";
 import axios from "axios";
+import {Flex, Typography} from "antd";
 
 const PdfViewer = ({ file }) => {
 	const [numPages, setNumPages] = useState(null);
@@ -106,58 +107,72 @@ const PdfViewer = ({ file }) => {
 
 
 	return (
-		<div
-			ref={containerRef}
-			style={{
-				position: "relative",
-				width: "100%",
-				height: "100%",
-				backgroundColor: "#f0f0f0",
-				overflow: "hidden",
-				userSelect: "none", // 防止拖动时选中文字
-			}}
-			onMouseDown={handleMouseDown}
-			onMouseMove={handleMouseMove}
-			onMouseUp={handleMouseUp}
-		>
-			<Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`}>
-				<Viewer fileUrl={file} onLoadSuccess={onLoadSuccess} width={containerWidth}/>
-			</Worker>
-			<div>
-				{numPages && (
-					<p>PDF 页数: {numPages}</p>
-				)}
-			</div>
-			{/* 动态绘制的矩形 */}
-			{/* 显示矩形轮廓 */}
-			{rect && (
+		<>
+		{
+			file ?
 				<div
+					ref={containerRef}
 					style={{
-						position: "absolute",
-						left: `${rect.x}px`,
-						top: `${rect.y}px`,
-						width: `${rect.width}px`,
-						height: `${rect.height}px`,
-						border: "2px dashed red",
-						backgroundColor: "rgba(255, 0, 0, 0.1)", // 半透明填充
-						pointerEvents: "none", // 防止矩形干扰鼠标事件
+						position: "relative",
+						width: "100%",
+						height: "100%",
+						backgroundColor: "#f0f0f0",
+						overflow: "hidden",
+						userSelect: "none", // 防止拖动时选中文字
 					}}
-				/>
-			)}
-			<div
-				style={{
-					position: "absolute",
-					bottom: "20px",
-					left: "20px",
-					backgroundColor: "white",
-					padding: "10px",
-					border: "1px solid #ccc",
-				}}
-			>
-				<h3>OCR 结果:</h3>
-				<p>{ocrResult || "等待识别..."}</p>
-			</div>
-		</div>
+					onMouseDown={handleMouseDown}
+					onMouseMove={handleMouseMove}
+					onMouseUp={handleMouseUp}
+				>
+
+						<Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`}>
+							<Viewer fileUrl={file} onLoadSuccess={onLoadSuccess} width={containerWidth}/>
+						</Worker>
+						<div>
+							{numPages && (
+								<p>PDF 页数: {numPages}</p>
+							)}
+						</div>
+						{/* 动态绘制的矩形 */}
+						{/* 显示矩形轮廓 */}
+						{rect && (
+							<div
+								style={{
+									position: "absolute",
+									left: `${rect.x}px`,
+									top: `${rect.y}px`,
+									width: `${rect.width}px`,
+									height: `${rect.height}px`,
+									border: "2px dashed red",
+									backgroundColor: "rgba(255, 0, 0, 0.1)", // 半透明填充
+									pointerEvents: "none", // 防止矩形干扰鼠标事件
+								}}
+							/>
+						)}
+						<div
+							style={{
+								position: "absolute",
+								bottom: "20px",
+								left: "20px",
+								backgroundColor: "white",
+								padding: "10px",
+								border: "1px solid #ccc",
+							}}
+						>
+							<h3>OCR 结果:</h3>
+							<p>{ocrResult || "等待识别..."}</p>
+						</div>
+
+				</div>
+				:
+				<Flex justify="center" align="center" style={{ height: '100%',width:"100%" }}>
+					<Typography.Title type="secondary" level={5} style={{ whiteSpace: 'nowrap' }}>
+						pdf文件
+					</Typography.Title>
+				</Flex>
+		}
+		</>
+
 	);
 };
 
