@@ -50,14 +50,19 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 			formData.append('file', file.originFileObj as FileType);
 		})
 		try {
+
 			const response = await axios.post("http://localhost:8080/OCRToPDF/imageToPDF", formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
-				responseType: "blob",
+				responseType: "json",  // 修改为 'blob' 如果是下载PDF文件
 			});
-			const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-			const pdfUrl = URL.createObjectURL(pdfBlob);
+			console.log("response", response);
+			const pdfUrl = response.data.path;
+
+
+
+
 			//遍历fileList数组，获取每个对象中的response属性，赋值给imageUrlList数组
 			const imageUrlList = fileList.map((file) => file.response);
 			refreshPdfUrl(pdfUrl,imageUrlList);

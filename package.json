@@ -11,9 +11,11 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.2",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@react-pdf-viewer/core": "^3.12.0",
     "antd": "^5.23.2",
     "antd-style": "^3.7.1",
     "axios": "^1.7.9",
+    "html2canvas": "^1.4.1",
     "jsonp": "^0.2.1",
     "lodash.clonedeep": "^4.5.0",
     "next": "^15.1.6",
@@ -24,6 +26,7 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.5",
     "react-pdf": "^8.0.2",
+    "tesseract.js": "^6.0.0",
     "yarn": "^1.22.22"
   },
   "devDependencies": {

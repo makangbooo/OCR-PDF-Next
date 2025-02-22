@@ -1,12 +1,11 @@
 "use client"; // ✅ 关键一步，Next.js 需要明确它是 Client Component
 import React, { useState } from 'react';
-// import {FileTextOutlined} from '@ant-design/icons';
 
-import {Button, Drawer, Flex, Space, Splitter, Typography} from 'antd';
+import { Drawer, Flex, Splitter, Typography} from 'antd';
 import UploadButton from "@/app/components/uploadButton";
-// import PdfViewer from "@/app/components/pdfPreviewer/page";
 import UploadViewer from "@/app/components/uploadViewer/uploadViewer";
 import ImageList from "@/app/components/imageList/imageList";
+import PdfViewer from "@/app/components/pdfPreviewer/page";
 
 
 const App: React.FC = () => {
@@ -27,6 +26,7 @@ const App: React.FC = () => {
 		setImageListUrl(imageUrlList)
 		onClose()
 	}
+	console.log("App.pdfUrl",pdfUrl)
 
 	return (
 		<div style={{ height: '100vh' }}>
@@ -60,8 +60,10 @@ const App: React.FC = () => {
 							pdfUrl ?
 								<div style={{ height: '100%',width:"100%"  }}>
 									{/*<h2 className="text-xl">OCR 生成的 PDF：</h2>*/}
-									<iframe src={pdfUrl} width={'100%'} height={'100%'} className="border rounded"></iframe>
-								</div>:
+									{/*<iframe src={pdfUrl} width={'100%'} height={'100%'} className="border rounded"></iframe>*/}
+									<PdfViewer file={pdfUrl} />
+								</div>
+								:
 								<Typography.Title type="secondary" level={5} style={{ whiteSpace: 'nowrap' }}>
 									pdf文件
 								</Typography.Title>
