@@ -1,26 +1,29 @@
 import React, {useState, useRef, useEffect} from "react";
-import { Worker, Viewer } from '@react-pdf-viewer/core';
+import {Worker, Viewer, DocumentLoadEvent} from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import html2canvas from "html2canvas";
 import axios from "axios";
 import {Flex, Typography} from "antd";
 
-const PdfViewer = ({ file }) => {
-	const [numPages, setNumPages] = useState(null);
+const PdfViewer: React.FC<{ refreshOcrText: (test: string) => void, file:string}>= ({ file,refreshOcrText }) => {
+	const [numPages, setNumPages] = useState<number>(0);
 
-	const onLoadSuccess = ({ numPages }) => {
+	const onLoadSuccess = (e: DocumentLoadEvent) => {
+		const numPages = e.doc.numPages;
 		setNumPages(numPages);
 	};
 	console.log("PdfViewer.file",file)
 
 	const [isDrawing, setIsDrawing] = useState(false); // 是否正在画矩形
-	const [startPos, setStartPos] = useState({ x: 0, y: 0 }); // 矩形起点
-	const [rect, setRect] = useState(null); // 矩形位置和尺寸，初始为 null
-	const containerRef = useRef(null); // 用于绑定容器
+	const [startPos, setStartPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 }); // 矩形起点
+	const [rect, setRect] = useState<{ x: number; y: number; width: number; height: number } | null>(null); // 矩形位置和尺寸，初始为 null
+	const containerRef = useRef<HTMLDivElement>(null); // 用于绑定容器
+
 	const [ocrResult, setOcrResult] = useState(""); // 保存 OCR 结果
 
 	// 开始绘制
-	const handleMouseDown = (e) => {
+	const handleMouseDown = (e: React.MouseEvent) => {
+		if (!containerRef.current) return;
 		const rectContainer = containerRef.current.getBoundingClientRect();
 		const x = e.clientX - rectContainer.left;
 		const y = e.clientY - rectContainer.top;
@@ -31,8 +34,9 @@ const PdfViewer = ({ file }) => {
 	};
 
 	// 动态更新矩形
-	const handleMouseMove = (e) => {
+	const handleMouseMove = (e: React.MouseEvent) => {
 		if (!isDrawing) return;
+		if (!containerRef.current) return;
 
 		const rectContainer = containerRef.current.getBoundingClientRect();
 		const currentX = e.clientX - rectContainer.left;
@@ -53,6 +57,7 @@ const PdfViewer = ({ file }) => {
 	const handleMouseUp = async () => {
 		if (!isDrawing || !rect) return;
 		setIsDrawing(false);
+		if (!containerRef.current) return;
 
 		try {
 			const canvas = await html2canvas(containerRef.current, {
@@ -75,9 +80,11 @@ const PdfViewer = ({ file }) => {
 			});
 
 			setOcrResult(response.data || "未识别到文字");
+			refreshOcrText(response.data || "未识别到文字");
 		} catch (error) {
 			console.error("OCR 处理失败:", error);
 			setOcrResult("OCR 处理失败");
+			refreshOcrText("OCR 处理失败");
 		}
 	};
 
@@ -125,8 +132,8 @@ const PdfViewer = ({ file }) => {
 					onMouseUp={handleMouseUp}
 				>
 
-						<Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`}>
-							<Viewer fileUrl={file} onLoadSuccess={onLoadSuccess} width={containerWidth}/>
+					<Worker workerUrl="/pdfjs/pdf.worker.js">
+							<Viewer fileUrl={file} onDocumentLoad={onLoadSuccess} />
 						</Worker>
 						<div>
 							{numPages && (

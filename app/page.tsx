@@ -12,6 +12,7 @@ const App: React.FC = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [pdfUrl, setPdfUrl] = useState('');
 	const [imageListUrl, setImageListUrl] = useState<string[]>([]);
+	const [ocrText, setOcrText] = useState<string>();
 
 	const showDrawer = () => {
 		setDrawerOpen(true);
@@ -25,8 +26,13 @@ const App: React.FC = () => {
 		setPdfUrl(pdfUrl);
 		setImageListUrl(imageUrlList)
 		onDrawerClose()
+	};
+
+	const refreshOcrText = (text: string) => {
+		setOcrText(text);
+		console.log("text",text)
 	}
-	console.log("App.pdfUrl",pdfUrl)
+
 
 	return (
 		<div style={{ height: '100vh' }}>
@@ -41,7 +47,7 @@ const App: React.FC = () => {
 					<ImageListViewer imageUrlList={imageListUrl}></ImageListViewer>
 				</Splitter.Panel>
 				<Splitter.Panel defaultSize="60%" min="10%">
-					<PdfViewer file={pdfUrl} />
+					<PdfViewer file={pdfUrl} refreshOcrText={refreshOcrText} />
 				</Splitter.Panel>
 				<Splitter.Panel defaultSize="20%" min="10%">
 					<Flex justify="center" align="center" style={{ height: '100%' }}>
