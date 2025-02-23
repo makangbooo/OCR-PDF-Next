@@ -31,12 +31,7 @@ const App: React.FC = () => {
 	return (
 		<div style={{ height: '100vh' }}>
 
-			<Drawer
-				placement='top'
-				closable={false}
-				onClose={onDrawerClose}
-				open={drawerOpen}
-			>
+			<Drawer placement='top' closable={false} onClose={onDrawerClose} open={drawerOpen}>
 				{/*拖拽上传框*/}
 				<UploadViewer refreshPdfUrl={(pdfUrl:string, imageUrlList: string[]) => refreshPdfUrl(pdfUrl, imageUrlList)}/>
 			</Drawer>
