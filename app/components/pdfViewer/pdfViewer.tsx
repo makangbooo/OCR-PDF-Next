@@ -119,7 +119,7 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 							height: "100%",
 							backgroundColor: "#f0f0f0",
 							overflow: "hidden",
-							userSelect: "none",
+							userSelect: isOcrEnabled ? "none" : "text",
 						}}
 						onMouseDown={handleMouseDown}
 						onMouseMove={handleMouseMove}

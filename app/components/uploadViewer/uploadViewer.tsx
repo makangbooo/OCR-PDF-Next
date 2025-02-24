@@ -38,30 +38,25 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 
 	const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
 		setFileList(newFileList);
-		console.log(newFileList);
 	}
 
 	const onClear = () => {
 		setFileList([]);
 	}
 	const onConvert = async () => {
-		const formData = new FormData();
-		fileList.forEach(file => {
-			formData.append('file', file.originFileObj as FileType);
-		})
+		// const formData = new FormData();
+		// 参数为对象数组，遍历数组，将每个对象中的name、originFileObj属性赋值给requestData
+		const requestData = fileList.map((file) => {
+			console.log("file",file)
+			return {
+				name: file.response.name,
+				url: file.response.path
+			}
+		});
 		try {
 
-			const response = await axios.post("http://localhost:8080/OCRToPDF/imageToPDF", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-				responseType: "json",  // 修改为 'blob' 如果是下载PDF文件
-			});
-			console.log("response", response);
+			const response = await axios.post("http://localhost:8080/OCRToPDF/imageToPDF", requestData);
 			const pdfUrl = response.data.path;
-
-
-
 
 			//遍历fileList数组，获取每个对象中的response属性，赋值给imageUrlList数组
 			const imageUrlList = fileList.map((file) => file.response);

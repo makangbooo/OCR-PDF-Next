@@ -5,6 +5,7 @@ interface ImageListProps {
 }
 
 const ImageListViewer: React.FC<ImageListProps> = ({ imageUrlList }) => {
+	console.log("ImageListViewer.imageUrlList",imageUrlList)
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%',width:"100%" }}>
 		{imageUrlList.length === 0 ?
@@ -14,11 +15,11 @@ const ImageListViewer: React.FC<ImageListProps> = ({ imageUrlList }) => {
               </Typography.Title>
             </Flex>
 			:
-			imageUrlList.map((url, index) => (
+			imageUrlList.map((data, index) => (
 					<>
 						<Image
 							width={'100%'}
-							src={url}
+							src={data.path}
 							key={index}
 							alt={`image-${index}`}
 						/>
