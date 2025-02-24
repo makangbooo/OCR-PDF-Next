@@ -1,18 +1,22 @@
 "use client"; // ✅ 关键一步，Next.js 需要明确它是 Client Component
 import React, { useState } from 'react';
-import { Drawer, Flex, Splitter, Typography} from 'antd';
+import { Drawer, Splitter} from 'antd';
 
 import UploadButton from "@/app/components/uploadButton";
 import UploadViewer from "@/app/components/uploadViewer/uploadViewer";
 import ImageListViewer from "@/app/components/imageList/imageList";
 import PdfViewer from "@/app/components/pdfViewer/pdfViewer";
+import OperaterViewer from "@/app/components/operaterViewer/operaterViewer";
+
+import {AntDesignOutlined} from "@ant-design/icons";
 
 
 const App: React.FC = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [pdfUrl, setPdfUrl] = useState('');
 	const [imageListUrl, setImageListUrl] = useState<string[]>([]);
-	const [ocrText, setOcrText] = useState<string>();
+	const [ocrText, setOcrText] = useState<string>("");
+	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
 
 	const showDrawer = () => {
 		setDrawerOpen(true);
@@ -33,6 +37,11 @@ const App: React.FC = () => {
 		console.log("text",text)
 	}
 
+	const refreshOcrMode = (mode: boolean) => {
+		setIsOcrEnabled(mode);
+		console.log("mode",mode)
+	}
+
 
 	return (
 		<div style={{ height: '100vh' }}>
@@ -43,18 +52,14 @@ const App: React.FC = () => {
 			</Drawer>
 			<Splitter style={{ height: '98%', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
 				<Splitter.Panel defaultSize="20%" min="10%">
-					<UploadButton onClick={showDrawer}/>
+					<UploadButton onClick={showDrawer} name={"导入图像"} buttonType={"upload"}/>
 					<ImageListViewer imageUrlList={imageListUrl}></ImageListViewer>
 				</Splitter.Panel>
 				<Splitter.Panel defaultSize="60%" min="10%">
-					<PdfViewer file={pdfUrl} refreshOcrText={refreshOcrText} />
+					<PdfViewer file={pdfUrl} refreshOcrText={refreshOcrText} refreshOcrMode={refreshOcrMode}/>
 				</Splitter.Panel>
 				<Splitter.Panel defaultSize="20%" min="10%">
-					<Flex justify="center" align="center" style={{ height: '100%' }}>
-						<Typography.Title type="secondary" level={5} style={{ whiteSpace: 'nowrap' }}>
-							操作界面
-						</Typography.Title>
-					</Flex>
+					<OperaterViewer ocrText={ocrText} isOcrEnabled={isOcrEnabled}/>
 				</Splitter.Panel>
 			</Splitter>
 		</div>

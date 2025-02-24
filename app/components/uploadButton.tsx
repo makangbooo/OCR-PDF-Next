@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {createStyles} from "antd-style";
 import {Button} from "antd";
-import {AntDesignOutlined} from "@ant-design/icons";
+import {AntDesignOutlined, CameraOutlined, DownloadOutlined, FileSearchOutlined} from "@ant-design/icons";
 const useStyle = createStyles(({ prefixCls, css }) => ({
 	linearGradientButton: css`
     &.${prefixCls}-btn-primary:not([disabled]):not(.${prefixCls}-btn-dangerous) {
@@ -28,23 +28,38 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
 
 
 // 渐变色按钮
-const UploadButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+const UploadButton: React.FC<{ onClick: () => void, name:string, buttonType:string}> = ({ onClick, name, buttonType }) => {
 	const { styles } = useStyle();
+	// 根据传入的buttonType判断按钮的icon
+	let icon;
+	switch (buttonType) {
+		case 'upload':
+			icon = <AntDesignOutlined />;
+			break;
+		case 'download':
+			icon = <DownloadOutlined />;
+			break;
+		case 'ocr':
+			icon = <FileSearchOutlined />;
+			break;
+		case 'screenshot':
+			icon = <CameraOutlined />;
+			break;
+		default:
+			icon = <AntDesignOutlined />;
+	}
 
 	return(
 	<Button
-		icon={<AntDesignOutlined />}
+		icon={icon}
 		type="primary"
 		size="large"
 		block
 		className={styles.linearGradientButton}
 		//onClick为父组件传递的方法
 		onClick={onClick}
-		// onClick ={() => {
-		// 	window.location.href = '/components/pdfPreviewer';
-		// }}
 	>
-		开始上传文件
+		{name}
 	</Button>
 	)
 }
