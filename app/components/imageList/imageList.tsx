@@ -13,7 +13,7 @@ interface ImageListProps {
 
 const ImageListViewer: React.FC<ImageListProps> = ({ imageUrlList, showDrawer}) => {
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%',width:"100%" }}>
+		<div style={{ height: '100%',width:"100%" }}>
 			<UploadButton onClick={showDrawer} name={"导入图像"} buttonType={"upload"}/>
 			{imageUrlList.length === 0 ?
 				<Flex justify="center" align="center" style={{ height: '95%' }}>
@@ -27,7 +27,6 @@ const ImageListViewer: React.FC<ImageListProps> = ({ imageUrlList, showDrawer}) 
 							<Image
 								width={'100%'}
 								src={data.path}
-								key={data.name}
 								alt={`image-${index}`}
 							/>
 							<Divider />

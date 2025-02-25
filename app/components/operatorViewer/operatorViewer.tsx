@@ -1,8 +1,16 @@
 import React from "react";
 import '@react-pdf-viewer/core/lib/styles/index.css';
 
-import {Flex, Tabs, Typography} from "antd";
+import {Flex, Input, List, Tabs, Typography} from "antd";
+const Item = List.Item;
 
+const data = [
+	'Racing car sprays burning fuel into crowd.',
+	'Japanese princess to wed commoner.',
+	'Australian walks 100km after outback crash.',
+	'Man charged over missing wedding girl.',
+	'Los Angeles battles huge wildfires.',
+];
 const OperatorViewer: React.FC<{ ocrText: string,isOcrEnabled: boolean }> = ({ ocrText, isOcrEnabled }) => {
 
 
@@ -29,7 +37,25 @@ const OperatorViewer: React.FC<{ ocrText: string,isOcrEnabled: boolean }> = ({ o
 								{
 									label: '数据项编辑',
 									key: '2',
-									children: 'Tab 2',
+									children:
+										<List
+											header={<div>各行数据项</div>}
+											bordered
+											dataSource={data}
+											renderItem={(item,index) => (
+												<Item>
+													<Typography.Text
+														mark
+														style={{flexShrink: 0,marginRight: '8px'}}
+
+													>
+														第{index+1}行:
+													</Typography.Text>
+													<Input placeholder="Basic usage" defaultValue={item}/>
+												</Item>
+											)}
+										/>
+									,
 								},
 								{
 									label: '上传档案系统',

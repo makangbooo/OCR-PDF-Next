@@ -115,9 +115,14 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 	return (
 		<>
 			{file ? (
-				<div style={{ position: "relative", width: "100%", height: "100%" }}>
+				<div
+					style={{
+						position: "relative",
+						width: "100%",
+						height: "100%",
+						overflow: "hidden" }}
+				>
 					{/* 添加按钮 */}
-
 					<UploadButton onClick={toggleOcrMode} name={isOcrEnabled ? "关闭 OCR 模式" : "启用 OCR 模式"} buttonType="ocr"/>
 
 					<div
@@ -125,7 +130,7 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 						style={{
 							position: "relative",
 							width: "100%",
-							// height: "100%",
+							height: "100%",
 							backgroundColor: "#f0f0f0",
 							overflow: "hidden",
 							userSelect: isOcrEnabled ? "none" : "text",
@@ -174,6 +179,7 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 						{/*)}*/}
 					</div>
 				</div>
+
 			) : (
 				<Flex justify="center" align="center" style={{ height: '100%', width: "100%" }}>
 					<Typography.Title type="secondary" level={5}>pdf文件</Typography.Title>
