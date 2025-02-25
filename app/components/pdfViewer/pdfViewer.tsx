@@ -4,7 +4,7 @@ import {Worker, Viewer, DocumentLoadEvent} from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import html2canvas from "html2canvas";
 import axios from "axios";
-import { Flex, Tooltip, Typography, Button } from "antd";
+import {Flex, Tooltip, Typography, Button, Popover} from "antd";
 import UploadButton from "@/app/components/uploadButton";
 
 // Import the styles provided by the react-pdf-viewer packages
@@ -125,7 +125,7 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 						style={{
 							position: "relative",
 							width: "100%",
-							height: "100%",
+							// height: "100%",
 							backgroundColor: "#f0f0f0",
 							overflow: "hidden",
 							userSelect: isOcrEnabled ? "none" : "text",
@@ -136,13 +136,12 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 					>
 						<Worker workerUrl="/pdfjs/pdf.worker.js">
 						{/*<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.js">*/}
-							<Viewer fileUrl={file} onDocumentLoad={onLoadSuccess}                 plugins={[
+							<Viewer fileUrl={file} onDocumentLoad={onLoadSuccess} plugins={[
 								defaultLayoutPluginInstance,
 							]}/>
 						</Worker>
-						<div>{numPages && <p>PDF 页数: {numPages}</p>}</div>
 						{rect && isOcrEnabled && (
-							<Tooltip title={ocrResult || "等待识别..."} placement="top">
+							<Popover content={ocrResult || "等待识别..."} title="ocr识别结果">
 								<div
 									style={{
 										position: "absolute",
@@ -154,23 +153,23 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 										backgroundColor: "rgba(255, 0, 0, 0.1)",
 									}}
 								></div>
-							</Tooltip>
+							</Popover>
 						)}
-						{isOcrEnabled && (
-							<div
-								style={{
-									position: "absolute",
-									bottom: "20px",
-									left: "20px",
-									backgroundColor: "white",
-									padding: "10px",
-									border: "1px solid #ccc",
-								}}
-							>
-								<h3>OCR 结果:</h3>
-								<p>{ocrResult || "等待识别..."}</p>
-							</div>
-						)}
+						{/*{isOcrEnabled && (*/}
+						{/*	<div*/}
+						{/*		style={{*/}
+						{/*			position: "absolute",*/}
+						{/*			bottom: "20px",*/}
+						{/*			left: "20px",*/}
+						{/*			backgroundColor: "white",*/}
+						{/*			padding: "10px",*/}
+						{/*			border: "1px solid #ccc",*/}
+						{/*		}}*/}
+						{/*	>*/}
+						{/*		<h3>OCR 结果:</h3>*/}
+						{/*		<p>{ocrResult || "等待识别..."}</p>*/}
+						{/*	</div>*/}
+						{/*)}*/}
 					</div>
 				</div>
 			) : (

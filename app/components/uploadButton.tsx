@@ -26,9 +26,15 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
   `,
 }));
 
+interface UploadButtonProps {
+	name: string;
+	buttonType: string;
+	onClick: () => void;
+}
+
 
 // 渐变色按钮
-const UploadButton: React.FC<{ onClick: () => void, name:string, buttonType:string}> = ({ onClick, name, buttonType }) => {
+const UploadButton: React.FC<UploadButtonProps> = ({ onClick, name, buttonType }) => {
 	const { styles } = useStyle();
 	// 根据传入的buttonType判断按钮的icon
 	let icon;

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState } from "react";
 import axios from "axios";
-import {PlusOutlined, UploadOutlined} from '@ant-design/icons';
+import {PlusOutlined} from '@ant-design/icons';
 import {Button, Divider, Image, Space, Upload} from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 
@@ -21,8 +21,8 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[]) => void }>= ({refreshPdfUrl} ) => {
 
-
 	const [previewOpen, setPreviewOpen] = useState(false);
+	const [convertLoading, setConvertLoading] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 
 	const handlePreview = async (file: UploadFile) => {
@@ -44,10 +44,10 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 		setFileList([]);
 	}
 	const onConvert = async () => {
+		setConvertLoading(true);
 		// const formData = new FormData();
 		// 参数为对象数组，遍历数组，将每个对象中的name、originFileObj属性赋值给requestData
 		const requestData = fileList.map((file) => {
-			console.log("file",file)
 			return {
 				name: file.response.name,
 				url: file.response.path
@@ -64,9 +64,7 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 		} catch (error) {
 			console.error("上传失败:", error);
 		}
-
-
-
+		setConvertLoading(false);
 	}
 
 
@@ -80,7 +78,7 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 	<>
 		<Space>
 			<Button onClick={onClear}>一键清空</Button>
-			<Button type="primary" onClick={onConvert}>
+			<Button type="primary" onClick={onConvert} loading={convertLoading}>
 				开始转换
 			</Button>
 		</Space>
@@ -91,6 +89,7 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 			fileList={fileList}
 			onPreview={handlePreview}
 			onChange={handleChange}
+			multiple={true}
 		>
 			{fileList.length >= 8 ? null : uploadButton}
 		</Upload>
