@@ -1,10 +1,10 @@
 "use client"; // ✅ 关键一步，Next.js 需要明确它是 Client Component
 import React, { useState, useRef, useEffect } from "react";
-import {Worker, Viewer, DocumentLoadEvent} from '@react-pdf-viewer/core';
+import {Worker, Viewer} from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import html2canvas from "html2canvas";
 import axios from "axios";
-import {Flex, Tooltip, Typography, Button, Popover} from "antd";
+import {Flex, Typography, Popover} from "antd";
 import UploadButton from "@/app/components/uploadButton";
 
 // Import the styles provided by the react-pdf-viewer packages
@@ -15,21 +15,21 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 
 
 const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string, refreshOcrMode: (mode: boolean)=>void }> = ({ file, refreshOcrText,refreshOcrMode }) => {
-	const [numPages, setNumPages] = useState<number>(0);
+	// const [numPages, setNumPages] = useState<number>(0);
 	const [isOcrEnabled, setIsOcrEnabled] = useState(false); // 新增状态：是否启用 OCR 功能
 	const [isDrawing, setIsDrawing] = useState(false);
 	const [startPos, setStartPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 	const [rect, setRect] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [ocrResult, setOcrResult] = useState("");
-	const [containerWidth, setContainerWidth] = useState(0);
+	const [, setContainerWidth] = useState(0);
 	const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
 	// PDF 加载成功时获取页数
-	const onLoadSuccess = (e: DocumentLoadEvent) => {
-		const numPages = e.doc.numPages;
-		setNumPages(numPages);
-	};
+	// const onLoadSuccess = (e: DocumentLoadEvent) => {
+	// 	const numPages = e.doc.numPages;
+	// 	// setNumPages(numPages);
+	// };
 
 	// 切换 OCR 功能的启用状态
 	const toggleOcrMode = () => {
@@ -136,9 +136,11 @@ const PdfViewer: React.FC<{ refreshOcrText: (text: string) => void, file: string
 					>
 						<Worker workerUrl="/pdfjs/pdf.worker.js">
 						{/*<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.js">*/}
-							<Viewer fileUrl={file} onDocumentLoad={onLoadSuccess} plugins={[
-								defaultLayoutPluginInstance,
-							]}/>
+							<Viewer fileUrl={file}
+									// onDocumentLoad={onLoadSuccess}
+									plugins={[
+										defaultLayoutPluginInstance,
+									]}/>
 						</Worker>
 						{rect && isOcrEnabled && (
 							<Popover content={ocrResult || "等待识别..."} title="ocr识别结果">

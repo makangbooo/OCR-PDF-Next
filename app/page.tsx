@@ -7,12 +7,16 @@ import ImageListViewer from "@/app/components/imageList/imageList";
 import PdfViewer from "@/app/components/pdfViewer/pdfViewer";
 import OperatorViewer from "@/app/components/operatorViewer/operatorViewer";
 
+interface ImageItem {
+	path: string;
+	name: string;
+}
 
 
 const App: React.FC = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [pdfUrl, setPdfUrl] = useState('');
-	const [imageListUrl, setImageListUrl] = useState<string[]>([]);
+	const [imageListUrl, setImageListUrl] = useState<ImageItem[]>([]);
 	const [ocrText, setOcrText] = useState<string>("");
 	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
 
@@ -22,7 +26,7 @@ const App: React.FC = () => {
 	const onDrawerClose = () => {
 		setDrawerOpen(false);
 	};
-	const refreshPdfUrl = (pdfUrl: string,imageUrlList: string[]) => {
+	const refreshPdfUrl = (pdfUrl: string,imageUrlList: ImageItem[]) => {
 		setPdfUrl(pdfUrl);
 		setImageListUrl(imageUrlList)
 		onDrawerClose()
@@ -41,7 +45,7 @@ const App: React.FC = () => {
 		<div style={{ height: '100vh'}}>
 			<Drawer placement='top' closable={false} onClose={onDrawerClose} open={drawerOpen}>
 				{/*拖拽上传框*/}
-				<UploadViewer refreshPdfUrl={(pdfUrl:string, imageUrlList: string[]) => refreshPdfUrl(pdfUrl, imageUrlList)}/>
+				<UploadViewer refreshPdfUrl={(pdfUrl:string, imageUrlList: ImageItem[]) => refreshPdfUrl(pdfUrl, imageUrlList)}/>
 			</Drawer>
 			<Splitter style={{ height: '100%', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
 				<Splitter.Panel defaultSize="20%" min="10%">

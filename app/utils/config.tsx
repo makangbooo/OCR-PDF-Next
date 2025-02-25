@@ -1,7 +1,7 @@
 
 const LOCAL_SERVER = "http://localhost:8080";
-const DEV_SERVER = "http://localhost:8080";
-const PROD_SERVER = "http://localhost:8080";
+// const DEV_SERVER = "http://localhost:8080";
+// const PROD_SERVER = "http://localhost:8080";
 
 const CURRENT_SERVER = LOCAL_SERVER;
 

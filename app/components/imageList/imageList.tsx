@@ -1,8 +1,13 @@
 import React from 'react';
 import {Divider, Flex, Image, Typography} from 'antd';
 import UploadButton from "@/app/components/uploadButton";
+
+interface ImageItem {
+	path: string;
+	name: string;
+}
 interface ImageListProps {
-	imageUrlList: string[]; // 图片 URL 列表
+	imageUrlList: ImageItem[]; // 图片 URL 列表
 	showDrawer: () => void;
 }
 
@@ -22,7 +27,7 @@ const ImageListViewer: React.FC<ImageListProps> = ({ imageUrlList, showDrawer}) 
 							<Image
 								width={'100%'}
 								src={data.path}
-								key={index}
+								key={data.name}
 								alt={`image-${index}`}
 							/>
 							<Divider />

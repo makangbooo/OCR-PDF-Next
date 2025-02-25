@@ -6,6 +6,11 @@ import {PlusOutlined} from '@ant-design/icons';
 import {Button, Divider, Image, Space, Upload} from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 
+interface ImageItem {
+	path: string;
+	name: string;
+}
+
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -19,7 +24,7 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 
 
-const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[]) => void }>= ({refreshPdfUrl} ) => {
+const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: ImageItem[]) => void }>= ({refreshPdfUrl} ) => {
 
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [convertLoading, setConvertLoading] = useState(false);
@@ -59,7 +64,12 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 			const pdfUrl = response.data.path;
 
 			//遍历fileList数组，获取每个对象中的response属性，赋值给imageUrlList数组
-			const imageUrlList = fileList.map((file) => file.response);
+			const imageUrlList = fileList.map((file) => {
+				return {
+					name: file.response.name,
+					path: file.response.path
+				}
+			});
 			refreshPdfUrl(pdfUrl,imageUrlList);
 		} catch (error) {
 			console.error("上传失败:", error);
@@ -96,6 +106,7 @@ const UploadViewer: React.FC<{ refreshPdfUrl: (url:string, imageUrlList: string[
 		{previewImage && (
 
 			<Image
+				alt={previewImage}
 				wrapperStyle={{ display: 'none' }}
 				preview={{
 					visible: previewOpen,
